@@ -22,18 +22,16 @@
 
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "stats.h"
 
 /* Size of the Data Set */
 #define SIZE (40)
 
-
-unsigned char find_median(unsigned char A[], int size){
-    int median_index = size/2;
-    return A[median_index];
+int comparator (const void * p1, const void * p2)   //For qsort.
+{
+  return (*(unsigned char*)p2 - *(unsigned char*)p1);
 }
-
-
 
 void main() {
 
@@ -45,7 +43,47 @@ void main() {
 
   /* Other Variable Declarations Go Here */
   /* Statistics and Printing Functions Go Here */
-
+  unsigned char A[] = {1, 2, 3, 4, 5};
+  sort_array(A, 5);
+  for(int i = 0; i < 5; i++)
+    printf("%d ", A[i]);
 }
 
 /* Add other Implementation File Code Here */
+unsigned char find_median(unsigned char A[], int size){
+	return A[size/2];
+}
+unsigned char find_mean(unsigned char A[], int size){
+	int sum = 0;
+	for(int i = 0; i < size; i++)
+        sum += A[i];
+    return (unsigned char)(sum/size);   //Calculate, cast, return.
+}
+unsigned char find_maximum(unsigned char A[], int size){
+	unsigned char max = A[0];
+	for(int i = 1; i < size; i++)
+        if(A[i] > max) max = A[i];
+    return max;
+}
+unsigned char find_minimum(unsigned char A[], int size){
+	unsigned char min = A[0];
+	for(int i = 1; i < size; i++)
+        if(A[i] < min) min = A[i];
+    return min;
+}
+void sort_array(unsigned char A[], int size){
+    qsort(A, size, sizeof(unsigned char), comparator);
+
+}
+void print_array(unsigned char A[], int size){
+    for(int i = 0; i < size; i++)
+        printf("%d ", A[i]);
+    printf("\n");
+}
+void print_statistics(unsigned char A[], int size){
+    sort_array(A, size);
+    printf("Minimum: %d\n", A[size-1]);
+    printf("Maximum: %d\n", A[0]);
+    printf("Median:  %d\n", find_median(A, size));
+    printf("Mean:    %d\n", find_mean(A, size));
+}
